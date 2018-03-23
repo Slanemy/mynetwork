@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Topology</title>
+    <script src="./assets/lib/vis.min.js"></script>
+    <script src="./assets/lib/vue.js"></script>
+    <script src="./assets/json/sent.json"></script>
+    <script src="./assets/json/received.json"></script>
+    <script src="./assets/lib/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="./assets/lib/element-ui-index.js"></script>
+    <link href="./assets/lib/vis.min.css"
+          rel="stylesheet"
+          type="text/css"/>
+
+<body>
+<div id="networkpro">
+    <p>
+        The Network Topology
+    </p>
+    <div class="buttons">
+        <el-button type="primary" @click="start" round>请求虚拟机</el-button>
+        <el-button @click="addTar" type="info" disabled round>添加攻击机</el-button>
+        <el-button @click="addAtt" type="info" disabled round>添加靶机</el-button>
+    </div>
+    <p><span class="text">靶机数量: {{addTarget.count}}台</span><span class="text">攻击机数量: {{addAttacker.count}}台</span></p>
+    <div id="mynetwork" v-popover:popover1>
+        <el-popover
+                ref="popover1"
+                placement="right"
+                width="350"
+                trigger="hover"
+                :disabled="dis">
+            <p>{{content}}</p>
+            <div style="text-align: right; margin: 0">
+                <el-button type="primary" size="mini" @click="tolink" v-if="seen">远程桌面</el-button>
+                <el-button type="text" size="mini" @click="dis=true">取消</el-button>
+            </div>
+        </el-popover>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+
+    var nodes = null
+    var edges = null
+    var network = null
+
+    var DIR = './assets/img/'
+    var EDGE_LENGTH_MAIN = 150
+
+    var COMPUTER = 'computer.png'
+    var NODE = 'node.png'
+
+    var attAttr = {
+        amount: 1,
+        count: 1
+    }
+
+    var tarAttr = {
+        amount: 1,
+        count: 1
+    }
+
+    // Called when the Visualization API is loaded.
+    function draw() {
+        // Create a data table with nodes.
+        nodes = [];
+
+        // Create a data table with links.
+        edges = [];
+
+        var nodeCount = 1;
+
+        for (var i = 1; i <= attAttr.amount; i++) {
+            nodes.push({id: nodeCount++, label: '攻击机\n' + attAttr.count++, image: DIR + COMPUTER, shape: 'image'})
+        }
+
+        for (i = 1; i <= tarAttr.amount; i++) {
+            nodes.push({id: nodeCount++, label: '靶机\n' + tarAttr.count++, image: DIR + COMPUTER, shape: 'image'})
+        }
+
+        var wrapNum = nodeCount;
+
+        nodes.push({id: wrapNum, image: DIR + NODE, shape: 'image'});
+
+        for (i = 1; i < attAttr.count; i++) {
+            edges.push({from: i, to: wrapNum, length: EDGE_LENGTH_MAIN});
+        }
+
+        for (; i < tarAttr.count + attAttr.count - 1; i++) {
+            edges.push({from: i, to: wrapNum, length: EDGE_LENGTH_MAIN});
+        }
+
+        // create a network
+        var container = document.getElementById('mynetwork');
+        var data = {
+            nodes: nodes,
+            edges: edges
+        };
+        var options = {
+            interaction: {hover: true}
+        };
+        network = new vis.Network(container, data, options);
+        network.on('click', function (params) {
+            var _number = params.nodes[0];
+            if (_number) {
+                var _this = networkpro;
+                _this.dis = false;
+                var _position = network.getPositions(_number);
+                var _x = _position[_number].x;
+                var _y = _position[_number].y;
+                _imageInfo = sentData.imageInfo;
+                _imageID = _imageInfo.details[_number - 1].id;
+                _image=receData[_imageID]
+                _imageIP=_image.IP;
+                if (_number === 1) {
+                    _username = _imageInfo.details[_number - 1].username;
+                    _pwd = _imageInfo.details[_number - 1].pwd;
+                    _this.content = "攻击机"+"\r\nIP:" + _imageIP+"\r\nUsername:" + _username + "\r\nPassword:" + _pwd;
+                    networkpro.link=_image.guacamoleInfo.url;
+                    networkpro.seen=true
+                }
+                else{
+                    _this.content = "靶机\r\nIP:" + _imageIP;
+                    networkpro.seen=false
+                }
+            }
+        });
+        attAttr.count = tarAttr.count = 1;
+    }
+
+    var networkpro = new Vue({
+        el: '#networkpro',
+        data: {
+            dis: true,
+            content: '',
+            addTarget: {
+                count: 1
+            },
+            addAttacker: {
+                count: 1
+            },
+            link:'',
+            seen:false
+
+        },
+        methods: {
+            tolink() {
+                window.location.href = this.link
+            },
+            addAtt() {
+                attAttr.amount++
+                this.addAttacker.count++
+                draw()
+            },
+            addTar() {
+                tarAttr.amount++
+                this.addTarget.count++
+                draw()
+            },
+            start() {
+                /****************
+                axios({
+                    method: 'post',
+                    url: '',
+                    data:sentData
+                })
+                    .then(function (response) {
+                        console.log(response.data)
+                    })
+                 ****************/
+                draw()
+            }
+        }
+    })
+</script>
+
+<style scoped>
+    * {
+        margin: 5px;
+    }
+
+    #mynetwork {
+        width: 600px;
+        height: 600px;
+        border: 1px solid lightgray;
+    }
+
+    .text {
+        margin: 100px;
+    }
+
+
+</style>
+
+</html>

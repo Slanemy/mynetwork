@@ -1,0 +1,21 @@
+var sentData= {
+  "userInfo": {
+    "username": "xujing",
+    "userNumber": "04011234"
+  },
+  "imageInfo": {
+    "amount": "2",
+    "details": [
+      {
+        "id": "66cbf9a06e7f",
+        "username": "user",
+        "pwd": "user",
+        "guacd": true
+      },
+      {
+        "id": "c8312743bc09",
+        "guacd": false
+      }
+    ]
+  }
+}

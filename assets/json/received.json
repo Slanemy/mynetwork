@@ -1,0 +1,37 @@
+var receData =
+{
+  "66cbf9a06e7f": {
+    "IP": "1.168.25.1",
+    "Port": {
+      "3389/tcp": null
+    },
+    "containerID": "7675f04069",
+    "guacamoleInfo": {
+      "connectionID": "54",
+      "groupID": "50",
+      "url": "http://192.168.20.137:8080/guacamole/#/client/NTQAYwBteXNxbA=="
+    },
+    "networkID": "0e88484005",
+    "status": "running"
+  },
+  "c8312743bc09": {
+    "IP": "1.168.25.2",
+    "Port": {
+      "3306/tcp": null,
+      "80/tcp": null
+    },
+    "containerID": "2cd712692d",
+    "networkID": "0e88484005",
+    "status": "running"
+  },
+  "userToken": {
+    "authToken": "15E79A967FF52CDF7C802A637F4D93F0546B2D8376812CF2AD24CA84B618AFB7",
+    "availableDataSources": [
+      "mysql",
+      "mysql-shared"
+    ],
+    "dataSource": "mysql",
+    "username": "xujing"
+  },
+  "userTokenEncode": "%7B%22authToken%22%3A%20%2215E79A967FF52CDF7C802A637F4D93F0546B2D8376812CF2AD24CA84B618AFB7%22%2C%20%22username%22%3A%20%22xujing%22%2C%20%22dataSource%22%3A%20%22mysql%22%2C%20%22availableDataSources%22%3A%20%5B%22mysql%22%2C%20%22mysql-shared%22%5D%7D"
+}
