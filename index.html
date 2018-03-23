@@ -31,7 +31,6 @@
     <div id="mynetwork" v-popover:popover1>
         <el-popover
                 ref="popover1"
-                placement="right"
                 width="350"
                 trigger="hover"
                 :disabled="dis">
@@ -110,7 +109,6 @@
             var _number = params.nodes[0];
             if (_number) {
                 var _this = networkpro;
-                _this.dis = false;
                 var _position = network.getPositions(_number);
                 var _x = _position[_number].x;
                 var _y = _position[_number].y;
@@ -118,12 +116,13 @@
                 _imageID = _imageInfo.details[_number - 1].id;
                 _image=receData[_imageID]
                 _imageIP=_image.IP;
+                networkpro.seen=true
+                _this.dis = false;
                 if (_number === 1) {
                     _username = _imageInfo.details[_number - 1].username;
                     _pwd = _imageInfo.details[_number - 1].pwd;
                     _this.content = "攻击机"+"\r\nIP:" + _imageIP+"\r\nUsername:" + _username + "\r\nPassword:" + _pwd;
                     networkpro.link=_image.guacamoleInfo.url;
-                    networkpro.seen=true
                 }
                 else{
                     _this.content = "靶机\r\nIP:" + _imageIP;
@@ -193,6 +192,12 @@
 
     .text {
         margin: 100px;
+    }
+
+    .el-popover{
+        position: absolute !important;
+        left:100px !important;
+        top:100px !important;
     }
 
 
