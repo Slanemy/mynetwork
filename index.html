@@ -123,6 +123,8 @@
                     _pwd = _imageInfo.details[_number - 1].pwd;
                     _this.content = "攻击机"+"\r\nIP:" + _imageIP+"\r\nUsername:" + _username + "\r\nPassword:" + _pwd;
                     networkpro.link=_image.guacamoleInfo.url;
+                    _userToken=receData.userTokenEncode;
+                    window.document.cookie = "GUAC_AUTH="+_userToken+";path=/;"//设置cookie
                 }
                 else{
                     _this.content = "靶机\r\nIP:" + _imageIP;
@@ -173,7 +175,7 @@
                         console.log(response.data)
                     })
                  ****************/
-                draw()
+                draw();
             }
         }
     })
